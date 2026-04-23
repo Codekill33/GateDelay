@@ -13,6 +13,9 @@ export default function Navbar() {
         GateDelay
       </Link>
       <div className="flex items-center gap-4">
+        <Link href="/transactions" className="text-sm" style={{ color: "var(--muted)" }}>
+          History
+        </Link>
         <Link href="/settings" className="text-sm" style={{ color: "var(--muted)" }}>
           Settings
         </Link>

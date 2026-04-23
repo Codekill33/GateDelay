@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, Suspense } from "react";
+import { StatsSkeleton, ChartSkeleton } from "../../components/ui/Skeleton";
 
 // Mock data — replace with real contract/API calls
 const MOCK_MARKET = {
@@ -55,6 +56,7 @@ export default function MarketDetailPage({ params }: { params: { id: string } })
       </div>
 
       {/* Stats */}
+      <Suspense fallback={<StatsSkeleton count={4} />}>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
           { label: "YES Price", value: `${(market.yesPrice * 100).toFixed(0)}¢` },
@@ -72,14 +74,17 @@ export default function MarketDetailPage({ params }: { params: { id: string } })
           </div>
         ))}
       </div>
+      </Suspense>
 
       {/* Chart placeholder */}
+      <Suspense fallback={<ChartSkeleton height={192} />}>
       <div
         className="rounded-xl p-6 flex items-center justify-center h-48"
         style={{ background: "var(--card)", border: "1px solid var(--border)" }}
       >
         <p className="text-sm" style={{ color: "var(--muted)" }}>Price chart coming soon</p>
       </div>
+      </Suspense>
 
       {/* Trading interface + Recent trades */}
       <div className="grid sm:grid-cols-2 gap-4">

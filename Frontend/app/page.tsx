@@ -1,5 +1,7 @@
 import FlightSearchAutocomplete from "./components/FlightSearchAutocomplete";
 import Link from "next/link";
+import { Suspense } from "react";
+import { MarketListSkeleton } from "./components/ui/Skeleton";
 
 const SAMPLE_MARKETS = [
   { id: "1", title: "Will AA123 arrive on time?", yesPrice: 0.62, volume: 14820, status: "open" },
@@ -28,6 +30,7 @@ export default function Home() {
         <h2 className="text-sm font-semibold mb-3" style={{ color: "var(--muted)" }}>
           ACTIVE MARKETS
         </h2>
+        <Suspense fallback={<MarketListSkeleton count={3} />}>
         <div className="space-y-2">
           {SAMPLE_MARKETS.map((m) => (
             <Link
@@ -53,6 +56,7 @@ export default function Home() {
             </Link>
           ))}
         </div>
+        </Suspense>
       </section>
     </main>
   );
