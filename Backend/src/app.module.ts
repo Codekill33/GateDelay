@@ -38,7 +38,6 @@ import { createKeyv } from '@keyv/redis';
     PositionsModule,
     SearchModule,
     PortfolioModule,
-    PortfolioModule,
   ],
   controllers: [AppController],
   providers: [AppService],
