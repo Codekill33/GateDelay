@@ -58,6 +58,14 @@ export class PositionsService {
     });
   }
 
+  getUsersForMarket(marketId: string): string[] {
+    const users = new Set<string>();
+    this.positions.forEach((p) => {
+      if (p.marketId === marketId && p.status === 'open') users.add(p.userId);
+    });
+    return [...users];
+  }
+
   private _withMetrics(p: Position): Position {
     const priceDiff = p.side === 'YES'
       ? p.currentPrice - p.entryPrice

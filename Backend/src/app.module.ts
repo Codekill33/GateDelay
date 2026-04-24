@@ -11,6 +11,7 @@ import { WebsocketModule } from './websocket/websocket.module';
 import { BlockchainModule } from './blockchain/blockchain.module';
 import { PositionsModule } from './positions/positions.module';
 import { SearchModule } from './search/search.module';
+import { PortfolioModule } from './portfolio/portfolio.module';
 import { createKeyv } from '@keyv/redis';
 
 @Module({
@@ -36,6 +37,7 @@ import { createKeyv } from '@keyv/redis';
     BlockchainModule,
     PositionsModule,
     SearchModule,
+    PortfolioModule,
   ],
   controllers: [AppController],
   providers: [AppService],
