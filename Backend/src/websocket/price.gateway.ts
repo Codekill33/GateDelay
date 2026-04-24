@@ -8,8 +8,9 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger, UseGuards } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { PositionsService } from '../positions/positions.service';
 
 @WebSocketGateway({
   cors: { origin: '*' },
@@ -24,7 +25,7 @@ export class PriceGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly maxConnectionsPerClient = 5;
   private readonly clientConnections = new Map<string, number>(); // clientId -> count
 
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(private readonly jwtService: JwtService, private readonly positionsService: PositionsService) {}
 
   async handleConnection(client: Socket) {
     try {
@@ -89,6 +90,7 @@ export class PriceGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   broadcastPriceUpdate(marketId: string, data: { price: number; volume: number; timestamp: number }) {
+    this.positionsService.updateMarketPrice(marketId, data.price);
     this.subscriptions.forEach((markets, socketId) => {
       if (markets.has(marketId)) {
         this.server.to(socketId).emit('priceUpdate', { marketId, ...data });

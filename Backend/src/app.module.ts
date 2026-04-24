@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { MarketDataModule } from './market-data/market-data.module';
 import { WebsocketModule } from './websocket/websocket.module';
 import { BlockchainModule } from './blockchain/blockchain.module';
+import { PositionsModule } from './positions/positions.module';
 import { createKeyv } from '@keyv/redis';
 
 @Module({
@@ -32,6 +33,7 @@ import { createKeyv } from '@keyv/redis';
     MarketDataModule,
     WebsocketModule,
     BlockchainModule,
+    PositionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
