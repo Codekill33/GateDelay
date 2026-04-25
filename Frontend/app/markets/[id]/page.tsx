@@ -7,6 +7,8 @@ import TradeConfirmation from "../../../components/trade/TradeConfirmation";
 import LiquidityDisplay from "../../../components/market/LiquidityDisplay";
 import { useAccount } from "wagmi";
 import PriceChart from "../../components/chart/PriceChart";
+import GasEstimator, { type GasSpeed, type GasEstimate } from "../../../components/gas/GasEstimator";
+import AnalysisPanel from "../../../components/ai/AnalysisPanel";
 
 // Mock data — replace with real contract/API calls
 const MOCK_MARKET = {
@@ -37,6 +39,8 @@ export default function MarketDetailPage({ params }: { params: { id: string } })
   const [amount, setAmount] = useState("");
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState("");
+  const [gasSpeed, setGasSpeed] = useState<GasSpeed>("standard");
+  const [gasEstimate, setGasEstimate] = useState<GasEstimate | null>(null);
 
   const amountValue = parseFloat(amount) || 0;
   const price = side === "YES" ? market.yesPrice : market.noPrice;
@@ -104,10 +108,16 @@ export default function MarketDetailPage({ params }: { params: { id: string } })
 
       {/* Order Book */}
       <OrderBook marketId={params.id} userAddress={address} />
+      {/* AI Analysis */}
+      <AnalysisPanel
+        marketId={market.id}
+        marketTitle={market.title}
+        marketDescription={market.description}
+        defaultCollapsed={false}
+      />
 
       {/* Trading interface + Recent trades */}
-      <div className="grid sm:grid-cols-2 gap-4">
-        {/* Trade */}
+      <div className="grid sm:grid-cols-2 gap-4">        {/* Trade */}
         <div
           className="rounded-xl p-5 space-y-4"
           style={{ background: "var(--card)", border: "1px solid var(--border)" }}
@@ -151,6 +161,25 @@ export default function MarketDetailPage({ params }: { params: { id: string } })
               {confirmationMessage}
             </div>
           ) : null}
+          {/* Gas fee estimate */}
+          <GasEstimator
+            compact
+            defaultSpeed={gasSpeed}
+            onSelect={(speed, estimate) => {
+              setGasSpeed(speed);
+              setGasEstimate(estimate);
+            }}
+          />
+          {gasEstimate && (
+            <div className="flex justify-between text-xs" style={{ color: "var(--muted)" }}>
+              <span>Est. gas fee</span>
+              <span>
+                {gasEstimate.feeUsd > 0
+                  ? `≈ $${gasEstimate.feeUsd < 0.01 ? "<0.01" : gasEstimate.feeUsd.toFixed(3)}`
+                  : `${parseFloat(gasEstimate.feeEth).toFixed(6)} MNT`}
+              </span>
+            </div>
+          )}
           <button
             disabled={!isTradeValid}
             onClick={openConfirmation}
