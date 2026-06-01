@@ -12,6 +12,7 @@ import GasEstimator, { type GasSpeed, type GasEstimate } from "../../../componen
 import AnalysisPanel from "../../../components/ai/AnalysisPanel";
 import MarketSentiment from "../../../components/market/MarketSentiment";
 import ExecutionProgress, { type ExecutionStatus } from "../../../components/trade/ExecutionProgress";
+import EventTimeline from "../../../components/market/EventTimeline";
 
 // ── ABI (only the buy function) ──────────────────────────────────────────────
 const MARKET_MAKER_ABI = [
@@ -196,6 +197,9 @@ export default function MarketDetailPage({ params }: { params: { id: string } })
         marketDescription={market.description}
         defaultCollapsed={false}
       />
+
+      {/* Event Timeline */}
+      <EventTimeline marketId={market.id} />
 
       {/* Trading interface + Recent trades */}
       <div className="grid sm:grid-cols-2 gap-4">        {/* Trade */}
